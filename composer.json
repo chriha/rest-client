@@ -1,0 +1,22 @@
+{
+    "name": "chriha/rest-client",
+    "description": "Simple PHP REST client",
+    "keywords": [
+        "rest",
+        "client"
+    ],
+    "type": "project",
+    "url": "https://github.com/chriha/rest-client.git",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Chriha\\Clients\\": "src/"
+        }
+    }
+}
