@@ -1,5 +1,7 @@
 # rest-client
 
+[![Build Status](https://travis-ci.org/chriha/rest-client.svg?branch=master)](https://travis-ci.org/chriha/rest-client)
+
 A simple REST client with PHPs cURL.
 
 ## Install
