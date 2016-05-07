@@ -2,6 +2,12 @@
 
 A simple REST client with PHPs cURL.
 
+## Install
+
+```
+composer require chriha/rest-client
+```
+
 ## Usage
 
 Define your options
