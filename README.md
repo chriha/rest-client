@@ -14,14 +14,14 @@ $options = [
 
 See `\Chriha\Clients\Rest::getDefaultOptions()` for all default options.
 
-### GET
+#### GET
 
 ```php
 $rest = new \Chriha\Clients\Rest( $options );
 $rest->get( '/posts' );
 ```
 
-### POST
+#### POST
 
 ```php
 $post = [
@@ -33,7 +33,7 @@ $rest = new \Chriha\Clients\Rest( $options );
 $rest->post( '/posts', $post );
 ```
 
-### PUT / PATCH
+#### PUT / PATCH
 
 ```php
 $post = [
@@ -44,7 +44,7 @@ $rest = new \Chriha\Clients\Rest( $options );
 $rest->put( '/posts/1', $post );
 ```
 
-### DELETE
+#### DELETE
 
 ```php
 $rest = new \Chriha\Clients\Rest( $options );
@@ -53,9 +53,9 @@ $rest->delete( '/posts/1' );
 
 ## Options
 
-### Allow self signed certificates
+#### Allow self signed certificates
 
-Recommended only in dev environment. Default: `false`
+Recommended only in dev environment, so default is `false`
 
 ```php
 $options = [
@@ -63,7 +63,7 @@ $options = [
 ];
 ```
 
-### Set additional cURL options
+#### Set additional cURL options
 
 ```php
 $options = [
