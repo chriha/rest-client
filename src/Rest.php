@@ -366,6 +366,11 @@ class Rest
 
     /** getters & setters ************/
 
+    /**
+     * Merge options from definition with the defaults
+     *
+     * @param $options
+     */
     protected function mergeOptions( $options )
     {
         $defaults = $this->getDefaultOptions();
