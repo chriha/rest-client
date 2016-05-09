@@ -188,12 +188,11 @@ class Rest
 
         $this->method = $method;
 
-        // TODO: use connection timeout from options
         $options = [
             CURLOPT_HEADER         => false,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_USERAGENT      => $this->agent,
-            CURLOPT_CONNECTTIMEOUT => 2, // wait a maximum of 2 seconds
+            CURLOPT_CONNECTTIMEOUT => $this->options['connection_timeout'],
         ];
 
         if ( count( $this->options['headers'] ) || count( $headers ) )
@@ -390,16 +389,17 @@ class Rest
     public function getDefaultOptions()
     {
         return [
-            'headers'           => [ 'Content-Type' => 'application/json' ],
-            'parameters'        => [],
-            'curl_options'      => [],
-            'url'               => $this->url,
-            'token'             => null,
-            'secret'            => null,
-            'debug'             => false,
-            'allow_self_signed' => false,
-            'algorithm'         => 'sha256',
-            'validate'          => true,
+            'headers'            => [ 'Content-Type' => 'application/json' ],
+            'parameters'         => [],
+            'curl_options'       => [],
+            'url'                => $this->url,
+            'token'              => null,
+            'secret'             => null,
+            'debug'              => false,
+            'allow_self_signed'  => false,
+            'algorithm'          => 'sha256',
+            'validate'           => true,
+            'connection_timeout' => 0, // in seconds, use 0 to wait indefinitely
         ];
     }
 
