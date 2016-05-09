@@ -66,7 +66,4 @@ class RestClientTest extends RestTestCase
         $this->assertContains( $rest->getStatusCode(), [ 200, 204 ] );
     }
 
-    /** TODO */
-    public function it_authenticates_via_oauth1() {}
-
 }
