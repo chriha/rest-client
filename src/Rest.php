@@ -4,7 +4,6 @@ namespace Chriha\Clients;
 
 use Chriha\Clients\Exceptions\ResponseException;
 use Chriha\Clients\Exceptions\RestException;
-use Chriha\Clients\Response;
 
 class Rest
 {
@@ -353,7 +352,17 @@ class Rest
 
         if ( Response::check( $this->getStatusCode(), $this->method ) ) return;
 
-        throw new ResponseException( 'The request was not successful!', $this->getStatusCode() );
+        $exception = new ResponseException( "The request was not successful! Response message was: '{$this->response}'", $this->getStatusCode() );
+
+        // TODO: set expected status code
+        $exception->setUrl( $this->info->url )
+            ->setMethod( $this->method )
+            ->setTotalTime( $this->getTotalTime() )
+            ->setConnectTime( $this->getConnectionTime() )
+            ->setCertInfo( $this->getCertinfo() )
+            ->setContentType( $this->getResponseContentType() );
+
+        throw $exception;
     }
 
 
