@@ -2,7 +2,9 @@
 
 namespace Chriha\Clients;
 
+use Chriha\Clients\Exceptions\ResponseException;
 use Chriha\Clients\Exceptions\RestException;
+use Chriha\Clients\Response;
 
 class Rest
 {
@@ -54,6 +56,12 @@ class Rest
      * @var Resource
      */
     protected $handle;
+
+    /**
+     * Store used method
+     * @var string
+     */
+    protected $method;
 
     /**
      * Contains the cURL response body
@@ -179,6 +187,8 @@ class Rest
     {
         $url = $this->options['url'] . $uri;
 
+        $this->method = $method;
+
         // TODO: use connection timeout from options
         $options = [
             CURLOPT_HEADER         => false,
@@ -253,6 +263,8 @@ class Rest
         $this->info = (object)curl_getinfo( $this->handle );
         $error      = curl_error( $this->handle );
 
+        $this->checkValidResponse();
+
         if ( ! empty( $error ) )
         {
             throw new RestException( $error );
@@ -280,11 +292,27 @@ class Rest
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getStatusCode()
     {
         return $this->info->http_code;
+    }
+
+    /**
+     * Checks the response for valid HTTP code. To disable this
+     * functionality, set "validate" option to 'false'.
+     *
+     * @throws ResponseException
+     */
+    public function checkValidResponse()
+    {
+        // do nothing if validation is disabled or request method not set
+        if ( ! $this->options['validate'] || empty( $this->method ) ) return;
+
+        if ( Response::check( $this->getStatusCode(), $this->method ) ) return;
+
+        throw new ResponseException( 'The request was not successful!', $this->getStatusCode() );
     }
 
 
@@ -321,6 +349,7 @@ class Rest
             'debug'             => false,
             'allow_self_signed' => false,
             'algorithm'         => 'sha256',
+            'validate'          => true,
         ];
     }
 
