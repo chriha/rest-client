@@ -300,6 +300,26 @@ class Rest
     }
 
     /**
+     * Total transaction time in seconds for last transfer
+     *
+     * @return float
+     */
+    public function getTotalTime()
+    {
+        return $this->info->total_time;
+    }
+
+    /**
+     * Time in seconds it took to establish the connection
+     *
+     * @return float
+     */
+    public function getConnectionTime()
+    {
+        return $this->info->connect_time;
+    }
+
+    /**
      * Checks the response for valid HTTP code. To disable this
      * functionality, set "validate" option to 'false'.
      *
