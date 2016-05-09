@@ -9,7 +9,7 @@ class RestClientExceptionTest extends RestTestCase
 {
 
     /** @test */
-    public function it_does_not_throw_response_exception()
+    public function it_does_not_throw_a_response_exception()
     {
         $this->options['validate'] = false;
 
