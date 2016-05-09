@@ -72,7 +72,7 @@ class Response
     /**
      * @var array
      */
-    public static $exceptations = [
+    public static $expectations = [
         'GET'    => 200,
         'POST'   => [ 200, 201 ],
         'PUT'    => [ 200, 202 ],
@@ -109,12 +109,12 @@ class Response
     {
         $method = $method === 'PATCH' ? 'PUT' : $method;
 
-        if ( ! isset( static::$exceptations[$method] ) )
+        if ( ! isset( static::$expectations[$method] ) )
         {
             throw new RestException( "Unsupported method '{$method}'." );
         }
 
-        return static::$exceptations[$method];
+        return static::$expectations[$method];
     }
 
 }
