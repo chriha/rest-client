@@ -207,7 +207,6 @@ class Rest
             }
         }
 
-        // $parameters = array_merge( [ 'token' => $this->options['token'] ], $parameters );
         $parameters = array_merge( $this->options['parameters'], $parameters );
 
         if ( strtoupper( $method ) == 'POST' )
