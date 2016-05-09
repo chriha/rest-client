@@ -320,6 +320,16 @@ class Rest
     }
 
     /**
+     * TLS certificate chain
+     *
+     * @return array
+     */
+    public function getCertinfo()
+    {
+        return $this->info->certinfo;
+    }
+
+    /**
      * Checks the response for valid HTTP code. To disable this
      * functionality, set "validate" option to 'false'.
      *
