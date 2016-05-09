@@ -1,20 +1,11 @@
 <?php
 
+namespace Chriha\Clients\Tests;
+
 use Chriha\Clients\Rest;
 
-class RestClientTest extends PHPUnit_Framework_TestCase
+class RestClientTest extends RestTestCase
 {
-
-    protected $options;
-
-
-    public function setUp()
-    {
-        // TODO: provide own test API with faker
-        $this->options = [
-            'url' => 'http://jsonplaceholder.typicode.com',
-        ];
-    }
 
     /** @test */
     public function it_fetches_a_list_via_get_request()
