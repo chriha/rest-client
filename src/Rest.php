@@ -330,6 +330,17 @@ class Rest
     }
 
     /**
+     * Content-Type: of the requested document.
+     * NULL indicates server did not send valid Content-Type: header
+     *
+     * @return string
+     */
+    public function getResponseContentType()
+    {
+        return $this->info->content_type;
+    }
+
+    /**
      * Checks the response for valid HTTP code. To disable this
      * functionality, set "validate" option to 'false'.
      *
