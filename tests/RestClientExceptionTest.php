@@ -3,7 +3,6 @@
 namespace Chriha\Clients\Tests;
 
 use Chriha\Clients\Exceptions\ResponseException;
-use Chriha\Clients\Rest;
 
 class RestClientExceptionTest extends RestTestCase
 {
