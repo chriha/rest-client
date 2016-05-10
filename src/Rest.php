@@ -192,7 +192,6 @@ class Rest
             CURLOPT_HEADER         => false,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_USERAGENT      => $this->agent,
-            CURLOPT_CONNECTTIMEOUT => $this->options['connection_timeout'],
         ];
 
         if ( count( $this->options['headers'] ) || count( $headers ) )
@@ -403,7 +402,6 @@ class Rest
             'allow_self_signed'  => false,
             'algorithm'          => 'sha256',
             'validate'           => true,
-            'connection_timeout' => 0, // in seconds, use 0 to wait indefinitely
         ];
     }
 
