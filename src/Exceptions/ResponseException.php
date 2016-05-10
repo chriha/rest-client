@@ -6,150 +6,27 @@ class ResponseException extends RestException
 {
 
     /**
-     * @var string
+     * @var mixed
      */
-    protected $url;
-
-    /**
-     * @var string
-     */
-    protected $method;
-
-    /**
-     * @var float
-     */
-    protected $totalTime;
-
-    /**
-     * @var float
-     */
-    protected $connectTime;
-
-    /**
-     * @var array
-     */
-    protected $certInfo;
-
-    /**
-     * @var string
-     */
-    protected $contentType;
+    protected $expectedStatusCode;
 
 
     /** getters & setters ************/
 
     /**
-     * @param string $url
-     * @return $this
+     * @return mixed
      */
-    public function setUrl( $url )
+    public function getExpectedStatusCode()
     {
-        $this->url = $url;
-
-        return $this;
+        return $this->expectedStatusCode;
     }
 
     /**
-     * @return string
+     * @param mixed $expectedStatusCode
      */
-    public function getUrl()
+    public function setExpectedStatusCode( $expectedStatusCode )
     {
-        return $this->url;
-    }
-
-    /**
-     * @param string $method
-     * @return $this
-     */
-    public function setMethod( $method )
-    {
-        $this->method = $method;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMethod()
-    {
-        return $this->method;
-    }
-
-    /**
-     * @param float $time
-     * @return $this
-     */
-    public function setTotalTime( $time )
-    {
-        $this->totalTime = $time;
-
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getTotalTime()
-    {
-        return $this->totalTime;
-    }
-
-    /**
-     * @param float $time
-     * @return $this
-     */
-    public function setConnectTime( $time )
-    {
-        $this->connectTime = $time;
-
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getConnectTime()
-    {
-        return $this->connectTime;
-    }
-
-    /**
-     * @param array $certInfo
-     * @return $this
-     */
-    public function setCertInfo( $certInfo )
-    {
-        $this->certInfo = $certInfo;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCertInfo()
-    {
-        return $this->certInfo;
-    }
-
-    /**
-     * @param string $contentType
-     * @return $this
-     */
-    public function setContentType( $contentType )
-    {
-        $this->contentType = $contentType;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContentType()
-    {
-        return $this->contentType;
+        $this->expectedStatusCode = $expectedStatusCode;
     }
 
 }
