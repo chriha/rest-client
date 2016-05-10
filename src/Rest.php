@@ -80,6 +80,23 @@ class Rest
      */
     public $info;
 
+    /**
+     * The expected status codes
+     * @var mixed
+     */
+    protected $expected;
+
+    /**
+     * The 'rules' for the expected status codes
+     * @var array
+     */
+    public static $expectations = [
+        'GET'    => 200,
+        'POST'   => [ 200, 201 ],
+        'PUT'    => [ 200, 202 ],
+        'DELETE' => [ 200, 204 ]
+    ];
+
 
     /**
      * Create a new REST client.
@@ -102,6 +119,7 @@ class Rest
 
         echo "Response: {$this->getResponse()}\n\r";
         echo "Status Code: {$this->getStatusCode()}\n\r";
+        echo "Expected Status Code: {$this->getExpectedStatusCode()}\n\r";
     }
 
 
@@ -341,19 +359,51 @@ class Rest
         // do nothing if validation is disabled or request method not set
         if ( ! $this->options['validate'] || empty( $this->method ) ) return;
 
-        if ( Response::check( $this->getStatusCode(), $this->method ) ) return;
+        $this->expected = $this->expectByMethod( $this->method );
+
+        if ( $this->check( $this->getStatusCode(), $this->expected ) ) return;
 
         $exception = new ResponseException( "The request was not successful! Response message was: '{$this->response}'", $this->getStatusCode() );
 
-        // TODO: set expected status code
-        $exception->setUrl( $this->info->url )
-            ->setMethod( $this->method )
-            ->setTotalTime( $this->getTotalTime() )
-            ->setConnectTime( $this->getConnectionTime() )
-            ->setCertInfo( $this->getCertInfo() )
-            ->setContentType( $this->getContentType() );
+        $exception->setExpectedStatusCode( $this->expected );
 
         throw $exception;
+    }
+
+    /**
+     * Check the provided code and method for valid response
+     *
+     * @param int $code The code which was responded by the API
+     * @param mixed $expected The expected status code(s)
+     * @return bool
+     */
+    public function check( $code, $expected )
+    {
+        if ( is_array( $expected ) )
+        {
+            return in_array( $code, $expected );
+        }
+
+        return $code === $expected;
+    }
+
+    /**
+     * Get the excepted HTTP status code by method
+     *
+     * @param string $method
+     * @throws RestException
+     * @return mixed
+     */
+    public function expectByMethod( $method )
+    {
+        $method = $method === 'PATCH' ? 'PUT' : $method;
+
+        if ( ! isset( static::$expectations[$method] ) )
+        {
+            throw new RestException( "Unsupported method '{$method}'." );
+        }
+
+        return static::$expectations[$method];
     }
 
 
@@ -459,6 +509,22 @@ class Rest
         if ( ! array_key_exists( $key, $this->options ) ) return;
 
         $this->options[$key] = $value;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExpected()
+    {
+        return $this->expected;
+    }
+
+    /**
+     * @param mixed $expected
+     */
+    public function setExpected( $expected )
+    {
+        $this->expected = $expected;
     }
 
     /**

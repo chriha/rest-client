@@ -2,8 +2,6 @@
 
 namespace Chriha\Clients;
 
-use Chriha\Clients\Exceptions\RestException;
-
 class Response
 {
 
@@ -68,53 +66,5 @@ class Response
     const HTTP_LOOP_DETECTED = 508;                                               // RFC5842
     const HTTP_NOT_EXTENDED = 510;                                                // RFC2774
     const HTTP_NETWORK_AUTHENTICATION_REQUIRED = 511;                             // RFC6585
-
-    /**
-     * @var array
-     */
-    public static $expectations = [
-        'GET'    => 200,
-        'POST'   => [ 200, 201 ],
-        'PUT'    => [ 200, 202 ],
-        'DELETE' => [ 200, 204 ]
-    ];
-
-    /**
-     * Check the provided code and method for valid response
-     *
-     * @param int $code The code which was responded by the API
-     * @param string $method The method which was used in the request
-     * @return bool
-     */
-    public static function check( $code, $method = 'GET' )
-    {
-        $expected = static::expectByMethod( $method );
-
-        if ( is_array( $expected ) )
-        {
-            return in_array( $code, $expected );
-        }
-
-        return $code === $expected;
-    }
-
-    /**
-     * Get the excepted HTTP status code by method
-     *
-     * @param string $method
-     * @throws RestException
-     * @return mixed
-     */
-    public static function expectByMethod( $method )
-    {
-        $method = $method === 'PATCH' ? 'PUT' : $method;
-
-        if ( ! isset( static::$expectations[$method] ) )
-        {
-            throw new RestException( "Unsupported method '{$method}'." );
-        }
-
-        return static::$expectations[$method];
-    }
 
 }
