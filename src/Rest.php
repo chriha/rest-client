@@ -289,14 +289,29 @@ class Rest
     }
 
     /**
-     * Checks if the request get a successful response
+     * Checks if the request was successful
      *
-     * @param  integer $code
+     * @param integer $code
      * @return boolean
      */
-    public function succeeded( $code = 200 )
+    public function succeeded( $code = null )
     {
-        return $this->info->http_code === $code;
+        if ( ! is_null( $code ) )
+        {
+            return $this->info->http_code === $code;
+        }
+
+        if ( is_int( $this->getExpected() ) )
+        {
+            return $this->info->http_code === $this->getExpected();
+        }
+
+        if ( is_array( $this->getExpected() ) )
+        {
+            return in_array( $this->info->http_code, $this->getExpected() );
+        }
+
+        return $this->info->http_code === 200;
     }
 
     /**
