@@ -461,6 +461,7 @@ class Rest
             'allow_self_signed'  => false,
             'algorithm'          => 'sha256',
             'validate'           => true,
+            'response_as_array'  => false,
         ];
     }
 
@@ -496,16 +497,23 @@ class Rest
     /**
      * Returns the cURL response
      *
-     * @param  boolean $returnArray Checks if the result should be an array
+     * @param  boolean $asObject When FALSE, returned objects will be converted into associative arrays
      * @return mixed
      */
-    public function getResponse( $returnArray = true )
+    public function getResponse( $asObject = null )
     {
         if ( empty( $this->response ) ) return null;
 
-        if ( is_array( $this->response ) ) return $this->response;
+        if ( ! is_null( $asObject ) )
+        {
+            $shouldBeObject = (bool)$asObject;
+        }
+        else
+        {
+            $shouldBeObject = ! $this->options['response_as_array'];
+        }
 
-        $response = json_decode( $this->response, $returnArray );
+        $response = json_decode( $this->response, ! $shouldBeObject );
 
         if ( json_last_error() ) return $this->response;
 
