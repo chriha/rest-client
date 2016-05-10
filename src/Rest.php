@@ -255,23 +255,17 @@ class Rest
         curl_setopt_array( $this->handle, $options );
 
         $this->response = curl_exec( $this->handle );
+        $this->info     = (object)curl_getinfo( $this->handle );
+        $error          = curl_error( $this->handle );
 
-        $this->info = (object)curl_getinfo( $this->handle );
-        $error      = curl_error( $this->handle );
-
-        $this->checkValidResponse();
+        curl_close( $this->handle );
 
         if ( ! empty( $error ) )
         {
             throw new RestException( $error );
         }
 
-        curl_close( $this->handle );
-
-        if ( $this->info->http_code !== 200 && isset( $this->response['errors'] ) )
-        {
-            $this->setErrors( $this->response['errors'], $this->info->http_code );
-        }
+        $this->checkValidResponse();
 
         return $this;
     }
