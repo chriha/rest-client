@@ -14,7 +14,7 @@ class RestClientTest extends RestTestCase
         $rest->get( '/posts' );
 
         $this->assertTrue( $rest->succeeded() );
-        $this->assertGreaterThanOrEqual( 1, count( $rest->getData() ) );
+        $this->assertGreaterThanOrEqual( 1, count( $rest->getResponse() ) );
     }
 
     /** @test */
