@@ -467,49 +467,6 @@ class Rest
     }
 
     /**
-     * Setter for $error which should be returned from the service
-     *
-     * @param  array $errors Error text
-     * @param  integer $code HTTP code
-     * @return void
-     */
-    public function setErrors( $errors, $code = 0 )
-    {
-        $this->errors    = $errors;
-        $this->errorCode = $code;
-    }
-
-    /**
-     * Getter for $error
-     *
-     * @return array
-     */
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
-    /**
-     * Checks if any errors responded
-     *
-     * @return boolean
-     */
-    public function hasErrors()
-    {
-        return ! is_null( $this->errors );
-    }
-
-    /**
-     * Getter for $errorCode
-     *
-     * @return integer
-     */
-    public function getErrorCode()
-    {
-        return $this->errorCode;
-    }
-
-    /**
      * Set additional options
      *
      * @param  string $key
