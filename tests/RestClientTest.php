@@ -24,7 +24,7 @@ class RestClientTest extends RestTestCase
 
         $this->client->post( '/posts', $post );
 
-        $this->assertTrue( $this->client->succeeded( 201 ) );
+        $this->assertTrue( $this->client->succeeded() );
     }
 
     /** @test */
@@ -48,7 +48,7 @@ class RestClientTest extends RestTestCase
 
         $this->client->patch( '/posts/1', $post );
 
-        $this->assertContains( $this->client->getStatusCode(), [ 200, 204 ] );
+        $this->assertTrue( $this->client->succeeded() );
     }
 
     /** @test */
@@ -56,7 +56,7 @@ class RestClientTest extends RestTestCase
     {
         $this->client->delete( '/posts/1' );
 
-        $this->assertContains( $this->client->getStatusCode(), [ 200, 204 ] );
+        $this->assertTrue( $this->client->succeeded() );
     }
 
 }
