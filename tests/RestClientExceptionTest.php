@@ -11,10 +11,8 @@ class RestClientExceptionTest extends RestTestCase
     /** @test */
     public function it_does_not_throw_a_response_exception()
     {
-        $this->options['validate'] = false;
-
-        $rest = new Rest( $this->options );
-        $rest->get( '/postsS' );
+        $this->client->setOption( 'validate', false );
+        $this->client->get( '/postsS' );
     }
 
     /** TODO */
@@ -34,8 +32,7 @@ class RestClientExceptionTest extends RestTestCase
         $this->expectException( ResponseException::class );
         $this->expectExceptionCode( 404 );
 
-        $rest = new Rest( $this->options );
-        $rest->get( '/postsS' );
+        $this->client->get( '/postsS' );
     }
 
 }
