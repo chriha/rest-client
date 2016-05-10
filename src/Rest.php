@@ -429,25 +429,6 @@ class Rest
     }
 
     /**
-     * Return the data from the response
-     *
-     * @return array|object
-     */
-    public function getData()
-    {
-        $response = $this->getResponse();
-
-        if ( empty( $response ) ) return null;
-
-        if ( ! is_null( $response ) && isset( $response['data'] ) )
-        {
-            return is_array( $response ) ? $response['data'] : $response->data;
-        }
-
-        return $response;
-    }
-
-    /**
      * Returns the cURL response
      *
      * @param  boolean $returnArray Checks if the result should be an array
