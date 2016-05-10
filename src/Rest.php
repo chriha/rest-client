@@ -525,13 +525,15 @@ class Rest
      *
      * @param  string $key
      * @param  string $value
-     * @return void
+     * @return $this
      */
     public function setOption( $key, $value )
     {
         if ( ! array_key_exists( $key, $this->options ) ) return;
 
         $this->options[$key] = $value;
+
+        return $this;
     }
 
     /**
