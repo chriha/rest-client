@@ -298,20 +298,20 @@ class Rest
     {
         if ( ! is_null( $code ) )
         {
-            return $this->info->http_code === $code;
+            return $this->getStatusCode() === $code;
         }
 
         if ( is_int( $this->getExpected() ) )
         {
-            return $this->info->http_code === $this->getExpected();
+            return $this->getStatusCode() === $this->getExpected();
         }
 
         if ( is_array( $this->getExpected() ) )
         {
-            return in_array( $this->info->http_code, $this->getExpected() );
+            return in_array( $this->getStatusCode(), $this->getExpected() );
         }
 
-        return $this->info->http_code === 200;
+        return $this->getStatusCode() === 200;
     }
 
     /**
