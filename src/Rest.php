@@ -314,7 +314,7 @@ class Rest
      *
      * @return array
      */
-    public function getCertinfo()
+    public function getCertInfo()
     {
         return $this->info->certinfo;
     }
@@ -325,7 +325,7 @@ class Rest
      *
      * @return string
      */
-    public function getResponseContentType()
+    public function getContentType()
     {
         return $this->info->content_type;
     }
@@ -350,8 +350,8 @@ class Rest
             ->setMethod( $this->method )
             ->setTotalTime( $this->getTotalTime() )
             ->setConnectTime( $this->getConnectionTime() )
-            ->setCertInfo( $this->getCertinfo() )
-            ->setContentType( $this->getResponseContentType() );
+            ->setCertInfo( $this->getCertInfo() )
+            ->setContentType( $this->getContentType() );
 
         throw $exception;
     }
