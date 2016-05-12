@@ -516,11 +516,11 @@ class Rest
      * @param  boolean $asObject When FALSE, returned objects will be converted into associative arrays
      * @return mixed
      */
-    public function getResponse( $asObject = null )
+    public function getResponse( $asObject = true )
     {
         if ( empty( $this->response ) ) return null;
 
-        if ( ! is_null( $asObject ) )
+        if ( $asObject )
         {
             $shouldBeObject = (bool)$asObject;
         }
