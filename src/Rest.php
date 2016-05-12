@@ -9,12 +9,6 @@ class Rest
 {
 
     /**
-     * Debug switch
-     * @var boolean
-     */
-    protected $debug = false;
-
-    /**
      * Contains the result resource
      * @var resource
      */
@@ -108,19 +102,6 @@ class Rest
         $this->mergeOptions( $options );
     }
 
-    /**
-     * Client destructor
-     *
-     * @return void
-     */
-    public function __destruct()
-    {
-        if ( ! $this->debug ) return;
-
-        echo "Response: {$this->getResponse()}\n\r";
-        echo "Status Code: {$this->getStatusCode()}\n\r";
-        echo "Expected Status Code: {$this->getExpectedStatusCode()}\n\r";
-    }
 
 
     /** handlers *********************/
@@ -278,6 +259,8 @@ class Rest
 
         curl_close( $this->handle );
 
+        $this->debug( "Request took " . $this->getTotalTime() . "ms in total" );
+
         if ( ! empty( $error ) )
         {
             throw new RestException( $error );
@@ -421,6 +404,39 @@ class Rest
         return static::$expectations[$method];
     }
 
+    /**
+     * Print debugging message
+     *
+     * @param  mixed $message
+     * @return void
+     */
+    protected function debug( $message )
+    {
+        if ( ! $this->options['debug'] ) return;
+
+        if ( php_sapi_name() !== 'cli' )
+        {
+            var_dump( $message );
+
+            return;
+        }
+
+        if ( is_object( $message ) && method_exists( $message, '__toString' ) )
+        {
+            $print = (string)$message;
+        }
+        elseif ( is_object( $message ) || is_array( $message ) )
+        {
+            $print = json_encode( $message );
+        }
+        else
+        {
+            $print = $message;
+        }
+
+        echo "\e[0;34m" . date( 'Y-m-d H:i:s' ) . ":\033[0m {$print}\n\r";
+    }
+
 
     /** getters & setters ************/
 
@@ -550,17 +566,6 @@ class Rest
     public function setExpected( $expected )
     {
         $this->expected = $expected;
-    }
-
-    /**
-     * Setter for debug mode
-     *
-     * @param  boolean $debug
-     * @return void
-     */
-    public function debug( $debug = true )
-    {
-        $this->debug = $debug;
     }
 
 }
