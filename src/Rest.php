@@ -306,23 +306,23 @@ class Rest
     }
 
     /**
-     * Total transaction time in seconds for last transfer
+     * Total transaction time in ms for last transfer
      *
      * @return float
      */
     public function getTotalTime()
     {
-        return $this->info->total_time;
+        return $this->info->total_time * 1000;
     }
 
     /**
-     * Time in seconds it took to establish the connection
+     * Time in ms it took to establish the connection
      *
      * @return float
      */
     public function getConnectionTime()
     {
-        return $this->info->connect_time;
+        return $this->info->connect_time * 1000;
     }
 
     /**
