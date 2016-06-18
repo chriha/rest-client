@@ -88,6 +88,7 @@ class Rest
         'GET'    => 200,
         'POST'   => [ 200, 201 ],
         'PUT'    => [ 200, 202 ],
+        'PATCH'  => [ 200, 202 ],
         'DELETE' => [ 200, 204 ]
     ];
 
@@ -394,8 +395,6 @@ class Rest
      */
     public function expectByMethod( $method )
     {
-        $method = $method === 'PATCH' ? 'PUT' : $method;
-
         if ( ! isset( static::$expectations[$method] ) )
         {
             throw new RestException( "Unsupported method '{$method}'." );
