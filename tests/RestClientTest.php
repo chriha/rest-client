@@ -12,6 +12,7 @@ class RestClientTest extends RestTestCase
 
         $this->assertTrue( $this->client->succeeded() );
         $this->assertGreaterThanOrEqual( 1, count( $this->client->getResponse() ) );
+        $this->assertTrue( is_array( $this->client->json() ) );
     }
 
     /** @test */

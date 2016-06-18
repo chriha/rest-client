@@ -536,6 +536,17 @@ class Rest
     }
 
     /**
+     * Simple alias for the getResponse(...) method
+     *
+     * @param bool $asArray
+     * @return mixed
+     */
+    public function json( $asArray = true )
+    {
+        return $this->getResponse( ! $asArray );
+    }
+
+    /**
      * Set additional options
      *
      * @param  string $key
