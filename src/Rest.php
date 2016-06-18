@@ -96,7 +96,7 @@ class Rest
     /**
      * Create a new REST client.
      *
-     * @param  array $options
+     * @param array $options
      */
     public function __construct( array $options = [] )
     {
@@ -234,7 +234,8 @@ class Rest
 
         $options[CURLOPT_URL] = $url;
 
-        // don't verify certificates if we don't want to
+        // don't verify certificates if we don't want to. for security
+        // reasons, this should not be enabled in production
         if ( $this->options['allow_self_signed'] )
         {
             $options[CURLOPT_SSL_VERIFYPEER] = false;
@@ -372,7 +373,7 @@ class Rest
     /**
      * Check the provided code and method for valid response
      *
-     * @param int $code The code which was responded by the API
+     * @param int   $code     The code which was responded by the API
      * @param mixed $expected The expected status code(s)
      * @return bool
      */
@@ -389,7 +390,7 @@ class Rest
     /**
      * Get the excepted HTTP status code by method
      *
-     * @param string $method
+     * @param  string        $method
      * @throws RestException
      * @return mixed
      */
@@ -433,6 +434,7 @@ class Rest
             $print = $message;
         }
 
+        // add some colors for the timestamp
         echo "\e[0;34m" . date( 'Y-m-d H:i:s' ) . ":\033[0m {$print}\n\r";
     }
 
