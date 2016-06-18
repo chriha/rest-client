@@ -31,7 +31,8 @@ class RestClientTest extends RestTestCase
     public function it_updates_an_item_via_put_request()
     {
         $post = [
-            "title" => "lorem ipsum"
+            "title" => "lorem",
+            "body"  => "lorem ipsum dolor set"
         ];
 
         $this->client->put( '/posts/1', $post );
