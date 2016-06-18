@@ -186,7 +186,7 @@ class Rest
     {
         $url = $this->options['url'] . $uri;
 
-        $this->method = $method;
+        $this->method = $method = strtoupper( $method );
 
         $options = [
             CURLOPT_HEADER         => false,
@@ -208,14 +208,14 @@ class Rest
 
         $parameters = array_merge( $this->options['parameters'], $parameters );
 
-        if ( strtoupper( $method ) == 'POST' )
+        if ( $this->method === 'POST' )
         {
             $options[CURLOPT_POST]       = true;
             $options[CURLOPT_POSTFIELDS] = json_encode( $parameters );
         }
-        elseif ( strtoupper( $method ) != 'GET' )
+        elseif ( $this->method !== 'GET' )
         {
-            $options[CURLOPT_CUSTOMREQUEST] = strtoupper( $method );
+            $options[CURLOPT_CUSTOMREQUEST] = $this->method;
             $options[CURLOPT_POSTFIELDS]    = json_encode( $parameters );
         }
         elseif ( count( $parameters ) )
