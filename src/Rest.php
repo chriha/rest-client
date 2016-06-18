@@ -227,7 +227,7 @@ class Rest
                 $urlParams .= '&signature=' . $this->signature( $urlParams );
             }
 
-            $url .= strpos( $url, '?' ) ? '&' : '?';
+            $url .= strpos( $url, '?' ) !== false ? '&' : '?';
             $url .= $urlParams;
             $url  = preg_replace( "/%5B\d%5D/", "", $url );
         }
