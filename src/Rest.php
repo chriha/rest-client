@@ -582,7 +582,7 @@ class Rest
     {
         if ( empty( $this->response ) ) return null;
 
-        if ( $asObject )
+        if ( ! is_null( $asObject ) )
         {
             $shouldBeObject = (bool)$asObject;
         }
