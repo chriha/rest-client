@@ -194,6 +194,10 @@ class Rest
             CURLOPT_USERAGENT      => $this->agent,
         ];
 
+        $parameters = array_merge( $this->options['parameters'], $parameters );
+
+        $this->prepareAuth( $url, $parameters );
+
         if ( count( $this->options['headers'] ) || count( $headers ) )
         {
             $options[CURLOPT_HTTPHEADER] = [];
@@ -205,8 +209,6 @@ class Rest
                 $options[CURLOPT_HTTPHEADER][] = sprintf( "%s:%s", $key, $value );
             }
         }
-
-        $parameters = array_merge( $this->options['parameters'], $parameters );
 
         if ( $this->method === 'POST' )
         {
@@ -220,15 +222,7 @@ class Rest
         }
         elseif ( count( $parameters ) )
         {
-            $urlParams = http_build_query( $parameters );
-
-            if ( $this->hasAuth() )
-            {
-                $urlParams .= '&signature=' . $this->signature( $urlParams );
-            }
-
             $url .= strpos( $url, '?' ) !== false ? '&' : '?';
-            $url .= $urlParams;
             $url  = preg_replace( "/%5B\d%5D/", "", $url );
         }
 
@@ -472,11 +466,12 @@ class Rest
             'parameters'         => [],
             'curl_options'       => [],
             'url'                => $this->url,
+            'authentication'     => false,
             'token'              => null,
             'secret'             => null,
+            'algorithm'          => 'sha256',
             'debug'              => false,
             'allow_self_signed'  => false,
-            'algorithm'          => 'sha256',
             'validate'           => true,
             'response_as_array'  => false,
         ];
@@ -489,26 +484,92 @@ class Rest
      */
     protected function hasAuth()
     {
-        return ! is_null( $this->options['secret'] );
+        return !! $this->options['authentication'];
     }
 
     /**
-     * Create and return the signature for the request
+     * Prepare the request for authentication
+     *
+     * @param string $url
+     * @param array $params
+     * @throws RestException
+     */
+    protected function prepareAuth( $url, $params )
+    {
+        if ( $this->options['authentication'] === false )
+        {
+            return;
+        }
+        elseif ( ! $this->options['authentication'] === 'oauth1' )
+        {
+            throw new RestException( 'Unsupported authentication.' );
+        }
+
+        $this->prepareOauth1( $url, $params );
+    }
+
+    /**
+     * Prepare the request for OAuth authentication
      *
      * @throws RestException
-     * @param  string $query The query with all its data
+     * @param  string $url The full URL of the request
+     * @param  array $params The request parameters
      * @return string
      */
-    protected function signature( $query )
+    protected function prepareOauth1( $url, $params )
     {
-        if ( is_null( $this->options['secret'] ) )
+        if ( is_null( $this->options['token'] ) )
+        {
+            throw new RestException( 'No token key provided!' );
+        }
+        elseif ( is_null( $this->options['secret'] ) )
         {
             throw new RestException( 'No secret key provided!' );
         }
 
-        $query = is_array( $query ) ? http_build_query( $query ) : $query;
+        $oauth = [
+            'oauth_nonce'            => $this->generateNonce(),
+            'oauth_signature_method' => strtoupper( "HMAC-{$this->options['algorithm']}" ),
+            'oauth_timestamp'        => time(),
+            'oauth_token'            => $this->options['token'],
+            'oauth_version'          => '1.0',
+        ];
 
-        return base64_encode( hash_hmac( $this->options['algorithm'], $query, $this->options['secret'] ) );
+        $params    = array_merge( $params, $oauth );
+        $paramList = [];
+
+        foreach ( $params as $key => $value )
+        {
+            $paramList[rawurlencode( $key )] = rawurlencode( rawurlencode( $value ) );
+        }
+
+        // array needs to be sorted for a valid signature
+        ksort( $paramList );
+
+        $query = "";
+
+        foreach ( $paramList as $key => $value )
+        {
+            $query .= "{$key}={$value}&";
+        }
+
+        $query  = rtrim( $query, "&" );
+        $string = strtoupper( $this->method ) . "&" . rawurlencode( $url ) . "&" . rawurlencode( $query );
+
+        // the & is important and has to be added, even if there's no secret *troll*
+        $secret    = "&" . rawurlencode( $this->options['secret'] );
+        $signature = base64_encode( hash_hmac( $this->options['algorithm'], $string, $secret, true ) );
+
+        $oauth['oauth_signature'] = rawurlencode( $signature );
+
+        $oauthString = "";
+
+        foreach ( $oauth as $key => $value )
+        {
+            $oauthString .= $key . '="' . $value . '",';
+        }
+
+        $this->options['headers']['Authorization'] = "OAuth " . rtrim( $oauthString, ',' );
     }
 
     /**
@@ -578,6 +639,27 @@ class Rest
     public function setExpected( $expected )
     {
         $this->expected = $expected;
+    }
+
+    /**
+     * Generate a random string to use for the OAuth nonce
+     *
+     * See: https://stackoverflow.com/questions/4356289/php-random-string-generator/31107425#31107425
+     *
+     * @return string
+     */
+    private function generateNonce()
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $string     = '';
+        $max        = mb_strlen( $characters, '8bit' ) - 1;
+
+        for ( $i = 0; $i < 32; ++$i )
+        {
+            $string .= $characters[random_int( 0, $max )];
+        }
+
+        return $string;
     }
 
 }

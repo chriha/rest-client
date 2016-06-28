@@ -78,3 +78,13 @@ $options = [
     'curl_options' => [...],
 ];
 ```
+
+#### OAuth 1.0 authentication
+
+```php
+$options = [
+    'authentication' => 'oauth1',
+    'token'          => 'YOUR_API_TOKEN',
+    'secret'         => 'YOUR_API_SECRET',
+];
+```
