@@ -12,7 +12,6 @@ class RestClientTest extends RestTestCase
 
         $this->assertTrue( $this->client->succeeded() );
         $this->assertGreaterThanOrEqual( 1, count( $this->client->getResponse() ) );
-        $this->assertTrue( is_array( $this->client->json() ) );
     }
 
     /** @test */
@@ -59,6 +58,30 @@ class RestClientTest extends RestTestCase
         $this->client->delete( '/posts/1' );
 
         $this->assertTrue( $this->client->succeeded() );
+    }
+
+    /** @test */
+    public function it_returns_the_response_in_the_correct_format()
+    {
+        $this->client->get( '/posts' );
+
+        $arrays = $this->client->json();
+
+        $this->assertTrue( is_array( $arrays ) );
+
+        foreach ( $arrays as $array )
+        {
+            $this->assertTrue( is_array( $array ) );
+        }
+
+        $objects = $this->client->json( false );
+
+        $this->assertTrue( is_array( $objects ) );
+
+        foreach ( $objects as $object )
+        {
+            $this->assertTrue( is_object( $object ) );
+        }
     }
 
 }
