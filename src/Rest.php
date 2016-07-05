@@ -108,7 +108,7 @@ class Rest
     /** handlers *********************/
 
     /**
-     * GET request
+     * Alias for GET request
      *
      * @param  string $uri        The URI to use for the request
      * @param  array  $parameters The expecting parameters
@@ -121,7 +121,7 @@ class Rest
     }
 
     /**
-     * POST request
+     * Alias for POST request
      *
      * @param  string $uri        The URI to use for the request
      * @param  array  $parameters The expecting parameters
@@ -134,7 +134,7 @@ class Rest
     }
 
     /**
-     * PUT request
+     * Alias for PUT request
      *
      * @param  string $uri        The URI to use for the request
      * @param  array  $parameters The expecting parameters
@@ -147,7 +147,7 @@ class Rest
     }
 
     /**
-     * PATCH request
+     * Alias for PATCH request
      *
      * @param  string $uri        The URI to use for the request
      * @param  array  $parameters The expecting parameters
@@ -160,7 +160,7 @@ class Rest
     }
 
     /**
-     * DELETE request
+     * Alias for DELETE request
      *
      * @param  string $uri        The URI to use for the request
      * @param  array  $parameters The expecting parameters
@@ -333,8 +333,8 @@ class Rest
     }
 
     /**
-     * Content-Type: of the requested document.
-     * NULL indicates server did not send valid Content-Type: header
+     * Content-Type of the requested document.
+     * NULL indicates server did not send valid Content-Type header
      *
      * @return string
      */
@@ -600,7 +600,8 @@ class Rest
     }
 
     /**
-     * Simple alias for the getResponse(...) method
+     * Simple alias for the getResponse(...) method, which
+     * returns an array by default.
      *
      * @param bool $asArray
      * @return mixed
