@@ -223,6 +223,7 @@ class Rest
         elseif ( count( $parameters ) )
         {
             $url .= strpos( $url, '?' ) !== false ? '&' : '?';
+            $url .= http_build_query( $parameters );
             $url  = preg_replace( "/%5B\d%5D/", "", $url );
         }
 
