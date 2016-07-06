@@ -43,7 +43,7 @@ if ( isset( $argv[3] ) )
 
     foreach ( $splitted as $value )
     {
-        $param = explode( '=', $value, 1 );
+        $param = explode( '=', $value, 2 );
         $params[$param[0]] = $param[1];
     }
 }
@@ -52,7 +52,7 @@ $options = array_merge( $credentials, [
     'url'      => $url,
     'validate' => false
 ]);
-
+//var_dump($params,$options);exit;
 $client = new \Chriha\Clients\Rest( $options );
 
 $client->{$method}( $uri, $params );
