@@ -463,7 +463,7 @@ class Rest
     public function getDefaultOptions()
     {
         return [
-            'headers'            => [ 'Content-Type' => 'application/json' ],
+            'headers'            => [ 'Content-Type' => 'application/x-www-form-urlencoded' ],
             'parameters'         => [],
             'curl_options'       => [],
             'url'                => $this->url,
