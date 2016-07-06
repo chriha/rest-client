@@ -25,5 +25,8 @@
         "psr-4": {
             "Chriha\\Clients\\Tests\\": "tests/"
         }
-    }
+    },
+    "bin": [
+        "bin/rest"
+    ]
 }
