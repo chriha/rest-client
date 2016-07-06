@@ -1,0 +1,63 @@
+#!/usr/bin/php
+<?php
+
+if ( count( $argv ) <= 1 )
+{
+    die( 'No arguments specified.' );
+}
+
+$method = strtolower( $argv[1] );
+
+$parsedUrl = parse_url( $argv[2] );
+
+$url    = $parsedUrl['scheme'] . "://" . $parsedUrl['host'];
+$uri    = $parsedUrl['path'];
+
+unset( $argv[0] );
+unset( $argv[1] );
+unset( $argv[2] );
+
+require_once( getcwd() . '/vendor/autoload.php' );
+
+if ( file_exists( getcwd(). '/bin/.credentials' ) )
+{
+    $credentials = json_decode( file_get_contents( getcwd(). '/bin/.credentials' ), true );
+
+    if ( json_last_error() !== JSON_ERROR_NONE )
+    {
+        die( 'Could not encode credentials file.' );
+    }
+
+    $credentials['authentication'] = 'oauth1';
+}
+else
+{
+    $credentials = [];
+}
+
+$params = [];
+
+if ( isset( $argv[3] ) )
+{
+    $splitted = explode( '&', $argv[3] );
+
+    foreach ( $splitted as $value )
+    {
+        $param = explode( '=', $value );
+        $params[$param[0]] = $param[1];
+    }
+}
+
+$options = array_merge( $credentials, [
+    'url'      => $url,
+    'validate' => false
+]);
+
+$client = new \Chriha\Clients\Rest( $options );
+
+$client->{$method}( $uri, $params );
+
+echo "Request took \e[0;" . ( $client->getTotalTime() > 500 ? "31m" : "32m" ) . $client->getTotalTime() . "\e[0mms\n\r";
+echo "Response Code: \033[0;" . ( $client->succeeded() ?  "32m" : "31m" ) . $client->getStatusCode() . "\e[0m\n\r";
+echo "Response Body:\n\r";
+echo json_encode( $client->json(), JSON_PRETTY_PRINT ) . "\n\r";
