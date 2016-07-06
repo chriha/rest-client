@@ -50,6 +50,7 @@ $post = [
 
 $rest = new \Chriha\Clients\Rest( $options );
 $rest->put( '/posts/1', $post );
+$rest->patch( '/posts/1', $post );
 ```
 
 #### DELETE
@@ -87,4 +88,39 @@ $options = [
     'token'          => 'YOUR_API_TOKEN',
     'secret'         => 'YOUR_API_SECRET',
 ];
+```
+
+## Using the CLI rest client
+
+Make an alias like `alias='vendors/bin/rest'` for simpler usage of the client inside the project.
+
+With the following command you can do a request via the rest client.
+
+```shell
+$ ./rest GET http://api.localhost.io/v1/posts "parameters=specified&as=simple&query=string" "Content-Type:application/json;Accept-Charset: utf-8"
+```
+
+If you want to use `token` and `secret` for your authentication, you can place them as JSON in the `.rest` file of your project root:
+
+```json
+{
+    "token": "YOUR_API_TOKEN",
+    "secret": "YOUR_API_SECRET"
+}
+```
+
+The output of the rest client will be shown as the following:
+
+```
+Request took 23.45ms
+Response Code: 200
+Response Body:
+{
+    "meta": "info",
+    "data": [
+        {
+            "title": "lorem"
+        }
+    ]
+}
 ```
