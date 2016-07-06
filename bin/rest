@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 
 if ( count( $argv ) <= 1 )
@@ -6,20 +6,41 @@ if ( count( $argv ) <= 1 )
     die( 'No arguments specified.' );
 }
 
-$method = strtolower( $argv[1] );
-
+$method    = strtolower( $argv[1] );
 $parsedUrl = parse_url( $argv[2] );
 
-$url    = $parsedUrl['scheme'] . "://" . $parsedUrl['host'];
-$uri    = $parsedUrl['path'];
+$url = $parsedUrl['scheme'] . "://" . $parsedUrl['host'];
+$uri = $parsedUrl['path'];
 
 unset( $argv[0] );
 unset( $argv[1] );
 unset( $argv[2] );
 
-require_once( getcwd() . '/vendor/autoload.php' );
+foreach ( [ __DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php' ] as $file )
+{
+    if ( ! file_exists( $file ) ) continue;
 
-if ( file_exists( getcwd(). '/bin/.credentials' ) )
+    define( 'REST_COMPOSER_INSTALL', $file );
+
+    break;
+}
+
+unset( $file );
+
+if ( ! defined( 'REST_COMPOSER_INSTALL' ) )
+{
+    fwrite(STDERR,
+        'You need to set up the project dependencies using the following commands:' . PHP_EOL .
+        'wget http://getcomposer.org/composer.phar' . PHP_EOL .
+        'php composer.phar install' . PHP_EOL
+    );
+
+    die( 1 );
+}
+
+require_once( REST_COMPOSER_INSTALL );
+
+if ( file_exists( getcwd() . '/.rest' ) )
 {
     $credentials = json_decode( file_get_contents( getcwd(). '/bin/.credentials' ), true );
 
@@ -52,7 +73,7 @@ $options = array_merge( $credentials, [
     'url'      => $url,
     'validate' => false
 ]);
-//var_dump($params,$options);exit;
+
 $client = new \Chriha\Clients\Rest( $options );
 
 $client->{$method}( $uri, $params );
