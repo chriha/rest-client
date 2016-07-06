@@ -210,20 +210,29 @@ class Rest
             }
         }
 
+        if ( $this->options['headers']['Content-Type'] === 'application/json' )
+        {
+            $parsedParams = json_encode( $parameters );
+        }
+        else
+        {
+            $parsedParams = http_build_query( $parameters );
+        }
+
         if ( $this->method === 'POST' )
         {
             $options[CURLOPT_POST]       = true;
-            $options[CURLOPT_POSTFIELDS] = json_encode( $parameters );
+            $options[CURLOPT_POSTFIELDS] = $parsedParams;
         }
         elseif ( $this->method !== 'GET' )
         {
             $options[CURLOPT_CUSTOMREQUEST] = $this->method;
-            $options[CURLOPT_POSTFIELDS]    = json_encode( $parameters );
+            $options[CURLOPT_POSTFIELDS]    = $parsedParams;
         }
         elseif ( count( $parameters ) )
         {
             $url .= strpos( $url, '?' ) !== false ? '&' : '?';
-            $url .= http_build_query( $parameters );
+            $url .= $parsedParams;
             $url  = preg_replace( "/%5B\d%5D/", "", $url );
         }
 
