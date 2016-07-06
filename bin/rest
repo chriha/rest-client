@@ -43,7 +43,7 @@ if ( isset( $argv[3] ) )
 
     foreach ( $splitted as $value )
     {
-        $param = explode( '=', $value );
+        $param = explode( '=', $value, 1 );
         $params[$param[0]] = $param[1];
     }
 }
