@@ -541,7 +541,7 @@ class Rest
 
         foreach ( $params as $key => $value )
         {
-            $paramList[rawurlencode( $key )] = rawurlencode( rawurlencode( $value ) );
+            $paramList[rawurlencode( $key )] = rawurlencode( $value );
         }
 
         // array needs to be sorted for a valid signature
