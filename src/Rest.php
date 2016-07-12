@@ -479,6 +479,8 @@ class Rest
             'authentication'     => false,
             'token'              => null,
             'secret'             => null,
+            'username'           => null,
+            'password'           => null,
             'algorithm'          => 'sha256',
             'debug'              => false,
             'allow_self_signed'  => false,
@@ -510,12 +512,20 @@ class Rest
         {
             return;
         }
-        elseif ( ! $this->options['authentication'] === 'oauth1' )
+        elseif ( ! in_array( $this->options['authentication'], [ 'oauth1', 'basic' ] ) )
         {
             throw new RestException( 'Unsupported authentication.' );
         }
 
-        $this->prepareOauth1( $url, $params );
+        switch ( $this->options['authentication'] )
+        {
+            case 'oauth1':
+                $this->prepareOauth1( $url, $params );
+                break;
+            case 'basic':
+                $this->prepareBasicAuth();
+                break;
+        }
     }
 
     /**
@@ -580,6 +590,18 @@ class Rest
         }
 
         $this->options['headers']['Authorization'] = "OAuth " . rtrim( $oauthString, ',' );
+    }
+
+    /**
+     * Prepare the request for basic access authentication
+     *
+     * @return void
+     */
+    public function prepareBasicAuth()
+    {
+        $authString = base64_encode( $this->options['username'] . ':' . $this->options['password'] );
+
+        $this->options['headers']['Authorization'] = "Basic {$authString}";
     }
 
     /**
