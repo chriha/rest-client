@@ -210,7 +210,7 @@ class Rest
             }
         }
 
-        if ( $this->options['headers']['Content-Type'] === 'application/json' )
+        if ( $this->options['headers']['Content-Type'] === 'application/json' && $this->method !== 'GET' )
         {
             $parsedParams = json_encode( $parameters );
         }
