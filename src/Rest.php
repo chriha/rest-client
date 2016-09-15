@@ -92,6 +92,12 @@ class Rest
         'DELETE' => [ 200, 204 ]
     ];
 
+    /**
+     * Content types that will be handled as JSON
+     * @var array
+     */
+    protected $jsonContentTypes = [ 'application/json', 'application/x-amz-json-1.1' ];
+
 
     /**
      * Create a new REST client.
@@ -210,7 +216,7 @@ class Rest
             }
         }
 
-        if ( $this->options['headers']['Content-Type'] === 'application/json' )
+        if ( in_array( $this->options['headers']['Content-Type'], $this->jsonContentTypes ) )
         {
             $parsedParams = json_encode( $parameters );
         }
