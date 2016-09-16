@@ -92,7 +92,7 @@ $options = [
 
 ## Using the CLI rest client
 
-Make an alias like `alias='vendors/bin/rest'` for simpler usage of the client inside the project.
+Make an alias like `alias rest='vendors/bin/rest'` for simpler usage of the client inside the project.
 
 With the following command you can do a request via the rest client.
 
