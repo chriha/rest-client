@@ -216,7 +216,7 @@ class Rest
             }
         }
 
-        if ( in_array( $this->options['headers']['Content-Type'], $this->jsonContentTypes ) )
+        if ( in_array( $this->options['headers']['Content-Type'], $this->jsonContentTypes ) && $this->method !== 'GET' )
         {
             $parsedParams = json_encode( $parameters );
         }
